@@ -1,0 +1,43 @@
+.login {
+    background-color: #0058af;
+    background-size: cover;
+    scroll-margin-block-end: 0px;
+    scroll-margin-block-start: 0px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: scroll; 
+}
+
+.login::-webkit-scrollbar {
+    display: none;
+}
+
+.login-form {
+    background: rgba(43, 43, 43, 0.5);
+    border-radius: 2%;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff; 
+}
+
+.animacioinici {
+    animation: animacioinici 0.5s ease-in-out;
+    animation-iteration-count: 1;
+}
+
+.logo {
+    margin-right: 4%;
+    animation: animacioinici 0.5s ease-in-out;
+    animation-iteration-count: 1;
+    -webkit-animation: animacioinici 0.5s ease-in-out;
+}
+
+@keyframes animacioinici {
+    0% {
+        transform: scale(0.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
