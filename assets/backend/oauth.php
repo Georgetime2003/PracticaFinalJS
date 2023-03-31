@@ -25,15 +25,20 @@ try{
     $username = explode("@", $email);
     $username = $username[0];
 
-    if (strpos($username, '.') !== false) {
-        header('Location: ../../index.html');
-    } else {
-        session_start();
-        $_SESSION['usuari'] = $firstname;
-        $_SESSION['email'] = $email;
-        // i redirigirem a la pagina del admin
-        header('Location: ../../admin');
-    }
+    // if (strpos($username, '.') !== false) {
+    //     header('Location: ../../index.html');
+    // } else {
+    //     session_start();
+    //     $_SESSION['usuari'] = $firstname;
+    //     $_SESSION['email'] = $email;
+    //     // i redirigirem a la pagina del admin
+    //     header('Location: ../../admin');
+    // }
+    session_start();
+    $_SESSION['usuari'] = $firstname;
+    $_SESSION['email'] = $email;
+    // i redirigirem a la pagina del admin
+    header('Location: ../../admin');
 
    
     // finalment obrirem una sessio amb aquest usuari.
