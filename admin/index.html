@@ -9,7 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/24202bad1a.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="assets/frontend/css/app.css">
+    <script src="..\assets\frontend\js\import.js"></script>
+    <link rel="stylesheet" href="/assets/frontend/css/app.css">
     <title>Fotos Alumnes</title>
 </head>
 <body>
@@ -26,15 +27,22 @@
             </div>
           </div>
         </div>
-      </nav>
+      </nav>  
       <br>
       <div class="container">
           <div class="row">
               <div class="col-12">
-                  <h1>Prova Vista</h1>
+                  <h1>Inici</h1>
+                  <h2>Importar tsv</h2>
+                  <form method="post" enctype="multipart/form-data">
+                      <div class="mb-3">
+                          <label for="formFile" class="form-label">Importar fitxer</label>
+                          <input class="form-control" type="file" id="formFile" name="file">
+                      </div>
+                      <button type="button" id="Importar" class="btn btn-primary">Importar</button>
+                  </form>
               </div>
           </div>
       </div>
-      <script src="https://
 </body>
 </html>
