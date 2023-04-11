@@ -42,7 +42,7 @@ function importar() {
 					});
 				}
 				$.ajax({
-					url: "../assets/backend/import.php",
+					url: "assets/backend/import.php",
 					type: "POST",
 					data: JSON.stringify(json),
 					contentType: "application/json",
