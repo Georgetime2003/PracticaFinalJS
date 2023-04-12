@@ -1,5 +1,21 @@
 window.onload = function () {
 	obtenirCursos().then(mostrarCursos);
+	
+    $.ajax({
+        url: "../assets/backend/carregarDades.php",
+        type: "POST",
+        data: JSON.stringify({
+			accio: "classes"
+		}),
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    });
 };
 
 function obtenirCursos(){
@@ -39,7 +55,7 @@ function mostrarCursos(cursos){
 				break;
 			}
 		}
-		if (!trobat){
+		if (!trobat && !tutor.includes('.')){
 			cicles.push({
 				"cicle": cicle,
 				"curs": curs,

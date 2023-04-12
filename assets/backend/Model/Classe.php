@@ -1,32 +1,29 @@
 <?php 
 
-class Usuari implements JsonSerializable{
+class Classe implements JsonSerializable{
 
-    protected $usuari;
-    protected $nomCognoms;
     protected $cicle;
     protected $curs;
     protected $grup;
-    protected $imatge;
+    protected $tutor;
+    protected $alumnes = array();
 
     // Constructor
-    public function __construct($usuari, $nomCognoms, $cicle, $curs, $grup, $imatge)
+    public function __construct($cicle, $curs, $grup, $tutor)
     {
-        $this->usuari = $usuari;
-        $this->nomCognoms = $nomCognoms;
         $this->cicle = $cicle;
         $this->curs = $curs;
         $this->grup = $grup;
-        $this->imatge = $imatge;
+        $this->tutor = $tutor;
     }
 
     // Getters
-    public function getUsuari(){
-        return $this->usuari;
+    public function gettutor(){
+        return $this->tutor;
     }
 
-    public function getNomCognoms(){
-        return $this->nomCognoms;
+    public function getalumnes(){
+        return $this->alumnes;
     }
 
     public function getCicle(){
@@ -40,20 +37,8 @@ class Usuari implements JsonSerializable{
     public function getGrup(){
         return $this->grup;
     }
-    
-    public function getImatge(){
-        return $this->imatge;
-    }
 
     // Setters
-    public function setUsuari($usuari){
-        $this->usuari = $usuari;
-    }
-
-    public function setNomCognoms($nomCognoms){
-        $this->nomCognoms = $nomCognoms;
-    }
-
     public function setCicle($cicle){
         $this->cicle = $cicle;
     }
@@ -65,21 +50,28 @@ class Usuari implements JsonSerializable{
     public function setGrup($grup){
         $this->grup = $grup;
     }
-    
-    public function setImatge($imatge){
-        $this->imatge = $imatge;
+
+    public function setTutor($tutor){
+        $this->tutor = $tutor;
+    }
+
+    public function setAlumnes($alumnes){
+        $this->alumnes = $alumnes;
+    }
+
+    public function addAlumne($alumne){
+        array_push($this->alumnes, $alumne);
     }
 
     // Funció de la interficie JsonSerializable perque l'objecte sigui convertible a json
     public function jsonSerialize()
     {
         return [
-            "usuari" => $this->usuari,
-            "nomCognoms" => $this->nomCognoms,
             "cicle" => $this->cicle,
             "curs" => $this->curs,
             "grup" => $this->grup,
-            "imatge" => $this->imatge
+            "tutor" => $this->tutor,
+            "alumnes" => $this->alumnes
         ];
     }
 }
