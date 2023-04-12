@@ -37,6 +37,7 @@ try{
     session_start();
     $_SESSION['usuari'] = $firstname;
     $_SESSION['email'] = $email;
+    $_SESSION['token'] = $accessToken;
     // i redirigirem a la pagina del admin
     header('Location: ../../admin');
 
