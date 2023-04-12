@@ -39,7 +39,7 @@ function mostrarCursos(cursos){
 				break;
 			}
 		}
-		if (!trobat){
+		if (!trobat && !(tutor.contains("."))){
 			cicles.push({
 				"cicle": cicle,
 				"curs": curs,
