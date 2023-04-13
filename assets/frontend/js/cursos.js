@@ -112,15 +112,15 @@ function accedirCurs(classe){
 	}
 	thead.append(tr);
 	//Amb el fitxer passem per tots els alumnes comprovant els noms de cicles, cursos i grups i els afegim amb una array, tot seguit afegim la array a la taula
-	for (let i = 0; i <= classe.alumnes.length; ++i){
+	Object.values(classe.alumnes).forEach(alumne => {
 		var tr = $("<tr></tr>");
 		var td = $("<td></td>");
-		td.text(classe.alumnes[i].nomCognoms);
+		td.text(alumne.nomCognoms);
 		td.attr("class", "text-center");
 		tr.append(td);
 		td = $("<td></td>");
 		td.attr("class", "text-center");
-		if (classe.alumnes[i].imatge != null){
+		if (alumne.imatge != null){
 			td.text("Sí");
 		} else {
 			td.text("No");
@@ -132,10 +132,10 @@ function accedirCurs(classe){
 		button.addClass("btn btn-success");
 		button.text("Accedir");
 		button.click(function () {
-			accedirAlumne(classe.alumnes[i]);
+			accedirAlumne(alumne);
 		});
 		td.append(button);
 		tr.append(td);
 		tbody.append(tr);
-	}
+	});
 }
