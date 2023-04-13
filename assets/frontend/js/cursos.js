@@ -1,7 +1,13 @@
 window.onload = function () {
-	obtenirCursos().then(mostrarCursos);
-	
-    $.ajax({
+	try{
+		obtenirCursos();
+	} catch (e){
+		console.log(e);
+	}
+};
+
+function obtenirCursos(){
+	$.ajax({
         url: "../assets/backend/carregarDades.php",
         type: "POST",
         data: JSON.stringify({
@@ -10,19 +16,13 @@ window.onload = function () {
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
-            console.log(data);
+			data = data.classes;
+            mostrarCursos(data);
         },
         error: function(data) {
-            console.log(data);
+            throw new Error("Error obtenint les dades");
         }
     });
-};
-
-function obtenirCursos(){
-	var fitxer = "../assets/backend/database/JSON/classes.json";
-	return fetch(fitxer).then(function (response) {
-		return response.json();
-	});
 }
 
 
@@ -47,7 +47,7 @@ function mostrarCursos(cursos){
 		var cicle = cursos[i].cicle;
 		var curs = cursos[i].curs;
 		var grup = cursos[i].grup;
-		var tutor = cursos[i].usuari;
+		var tutor = cursos[i].tutor.nomCognoms;
 		var trobat = false;
 		for (let j = 0; j < cicles.length; ++j){
 			if (cicles[j].cicle == cicle && cicles[j].curs == curs && cicles[j].grup == grup){
@@ -55,11 +55,12 @@ function mostrarCursos(cursos){
 				break;
 			}
 		}
-		if (!trobat && !tutor.includes('.')){
+		if (!trobat){
 			cicles.push({
 				"cicle": cicle,
 				"curs": curs,
-				"grup": grup
+				"grup": grup,
+				"tutor": tutor
 			});
 		}
 	}
@@ -80,11 +81,15 @@ function mostrarCursos(cursos){
 		tr.append(td);
 		td = $("<td></td>");
 		td.attr("class", "text-center");
+		td.text(cicles[i].tutor);
+		tr.append(td);
+		td = $("<td></td>");
+		td.attr("class", "text-center");
 		var button = $("<button></button>");
 		button.addClass("btn btn-success");
 		button.text("Accedir");
 		button.click(function () {
-			accedirCurs(cicles[i].cicle, cicles[i].curs, cicles[i].grup, cursos);
+			accedirCurs(cursos[i]);
 		});
 		td.append(button);
 		tr.append(td);
@@ -92,7 +97,7 @@ function mostrarCursos(cursos){
 	}
 }
 
-function accedirCurs(cicle, curs, grup, cursos){
+function accedirCurs(classe){
 	var thead = $("#thead");
 	thead.text("");
 	var tbody = $("#tbody");
@@ -107,30 +112,30 @@ function accedirCurs(cicle, curs, grup, cursos){
 	}
 	thead.append(tr);
 	//Amb el fitxer passem per tots els alumnes comprovant els noms de cicles, cursos i grups i els afegim amb una array, tot seguit afegim la array a la taula
-	for (let i = 0; i < cursos.length; ++i){
-		if (cursos[i].cicle == cicle && cursos[i].curs == curs && cursos[i].grup == grup){
-			var tr = $("<tr></tr>");
-			var nomCognoms = cursos[i].nomCognoms;
-			var imatge = cursos[i].imatge;
-			var accio = document.createElement("button");
-			accio.className = "btn btn-success";
-			accio.innerHTML = "Fer foto";
-			accio.addEventListener("click", function () {
-				ferFoto(nomCognoms);
-			});
-			var td = document.createElement("td");
-			td.className = "text-center";
-			td.innerHTML = nomCognoms;
-			tr.append(td);
-			td = document.createElement("td");
-			td.className = "text-center";
-			td.innerHTML = imatge == "" ? "No" : "Sí";
-			tr.append(td);
-			td = document.createElement("td");
-			td.className = "text-center";
-			td.append(accio);
-			tr.append(td);
-			tbody.append(tr);
+	for (let i = 0; i <= classe.alumnes.length; ++i){
+		var tr = $("<tr></tr>");
+		var td = $("<td></td>");
+		td.text(classe.alumnes[i].nomCognoms);
+		td.attr("class", "text-center");
+		tr.append(td);
+		td = $("<td></td>");
+		td.attr("class", "text-center");
+		if (classe.alumnes[i].imatge != null){
+			td.text("Sí");
+		} else {
+			td.text("No");
 		}
+		tr.append(td);
+		td = $("<td></td>");
+		td.attr("class", "text-center");
+		var button = $("<button></button>");
+		button.addClass("btn btn-success");
+		button.text("Accedir");
+		button.click(function () {
+			accedirAlumne(classe.alumnes[i]);
+		});
+		td.append(button);
+		tr.append(td);
+		tbody.append(tr);
 	}
 }
