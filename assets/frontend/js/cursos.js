@@ -110,6 +110,16 @@ function accedirCurs(classe){
 		th.innerHTML = titols[i];
 		tr.append(th);
 	}
+	let td = $("<td></td>");
+	td.attr("class", "text-center");
+	let button = $("<button></button>");
+	button.addClass("btn btn-warning");
+	button.text("Tornar");
+	button.click(function () {
+		obtenirCursos();
+	});
+	td.append(button);
+	tr.append(td);
 	thead.append(tr);
 	//Amb el fitxer passem per tots els alumnes comprovant els noms de cicles, cursos i grups i els afegim amb una array, tot seguit afegim la array a la taula
 	Object.values(classe.alumnes).forEach(alumne => {
@@ -130,7 +140,7 @@ function accedirCurs(classe){
 		td.attr("class", "text-center");
 		var button = $("<button></button>");
 		button.addClass("btn btn-success");
-		button.text("Accedir");
+		button.text("Fer foto");
 		button.click(function () {
 			accedirAlumne(alumne);
 		});
