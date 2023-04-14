@@ -36,7 +36,7 @@ try{
     //     header('Location: ../../admin');
     // }
     session_start();
-    $_SESSION['usuari'] = $firstname;
+    $_SESSION['usuari'] = $username[0];
     $_SESSION['email'] = $email;
     $_SESSION['token'] = $accessToken;
     // i redirigirem a la pagina del admin
