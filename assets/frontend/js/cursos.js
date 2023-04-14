@@ -1,4 +1,5 @@
 window.onload = function () {
+	console.log(navigator.mediaDevices.enumerateDevices())
 	try{
 		obtenirCursos();
 	} catch (e){
@@ -130,10 +131,10 @@ function accedirCurs(classe){
 		tr.append(td);
 		td = $("<td></td>");
 		td.attr("class", "text-center");
-		if (alumne.imatge != null){
-			td.text("Sí");
-		} else {
+		if (alumne.imatge == null || alumne.imatge == ""){
 			td.text("No");
+		} else {
+			td.text("Si");
 		}
 		tr.append(td);
 		td = $("<td></td>");
@@ -148,4 +149,89 @@ function accedirCurs(classe){
 		tr.append(td);
 		tbody.append(tr);
 	});
+}
+
+function accedirAlumne(alumne){
+	$("#modalCamara").modal("show");
+	//Obtenir camara
+	//Comprovem si el navegador és d'ordenador o mòbil
+	if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+		//Si és d'ordenador
+		navigator.mediaDevices.getUserMedia({video: true})
+			.then(function (stream) {
+				video.srcObject = stream;
+				video.play();
+			}
+			)
+			.catch(function (err) {
+				console.log("An error occurred! " + err);
+			}
+		);
+	} else if (navigator.getUserMedia) { // Standard
+		navigator.getUserMedia({video: true}, function (stream) {
+			video.src = stream;
+			video.play();
+		}, errBack);
+	} else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+		navigator.webkitGetUserMedia({video: true}, function (stream) {
+			video.src = window.webkitURL.createObjectURL(stream);
+			video.play();
+		}, errBack);
+	}
+	$("#modalCamara").modal("show");
+	$("#video").show();
+	$("#btnFoto").click(function () {
+		//Pausem el video per fer la foto
+		$("#video").attr("hidden", true);
+		let canvas = document.createElement("canvas");
+		canvas.width = video.videoWidth;
+		canvas.height = video.videoHeight;
+		canvas.getContext('2d').drawImage(video, 0, 0);
+		//Mostrem la foto
+		$("#fotoAlumne").attr("src", canvas.toDataURL("image/png"));
+		$("#fotoAlumne").attr("hidden", false);
+		$("#ferFoto").attr("hidden", true);
+		$("#opcions").attr("hidden", false);
+		$("#guardarFoto").click(function () {
+			guardarImatgeAlumne(alumne, canvas.toDataURL("image/png"));
+		});
+	});
+	$("#repetirFoto").click(function () {
+		$("#fotoAlumne").attr("hidden", true);
+		$("#opcions").attr("hidden", true);
+		$("#ferFoto").attr("hidden", false);
+		$("#video").attr("hidden", false);
+	});
+	$("#modalCamara").on("hidden.bs.modal", function () {
+		video.srcObject.getTracks()[0].stop();
+		$("#fotoAlumne").attr("hidden", true);
+		$("#enviarFoto").attr("hidden", true);
+		$("#video").attr("hidden", false);
+	});
+	
+}
+
+function guardarImatgeAlumne(alumne, imatge){
+	$.ajax({
+		url: "../assets/backend/images/" + alumne.nomCognoms + ".png",
+		type: "PUT",
+		data: imatge,
+		contentType: "image/png",
+		success: function (data) {
+			//Guardem el JSON del client al servidor
+			$.ajax({
+				url: "../assets/backend/alumnes.php",
+				type: "POST",
+				data: JSON.stringify(alumne),
+				contentType: "application/json",
+				success: function (data) {
+					//Mostrem un missatge de confirmació
+					$("#modalCamara").modal("hide");
+					$("#missatge").text("Foto guardada correctament");
+					$(".toast").toast("show");
+				}
+			});
+		}
+	});
+
 }
