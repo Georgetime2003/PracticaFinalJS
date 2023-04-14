@@ -1,5 +1,23 @@
+var usuari;
 window.onload = function () {
   console.log(navigator.mediaDevices.enumerateDevices());
+  $.ajax({
+	url: "../assets/backend/login.php",
+	type: "POST",
+	data: JSON.stringify({
+	  accio: "logged",
+	}),
+	contentType: "application/json",
+	dataType: "json",
+	success: function (data) {
+		usuari = data;
+		console.log(data);
+	},
+	error: function (data) {
+		console.log(data);
+	  throw new Error("Error obtenint les dades");
+	},
+  });
   try {
     obtenirCursos();
   } catch (e) {
