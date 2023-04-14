@@ -8,7 +8,7 @@ $ibstr = str_replace(' ', '+', $ibstr);
 
 //Base64 to GdImage
 $ib64 = base64_decode($ibstr);
-$image = imageCreateFromString($ib64);
+$image = imagecreatefromstring($ib64);
 
 $filePath = 'database/images/'. $post->grup . '/' .$post->usuari .'.jpg';
 $bg = imagecreatetruecolor(imagesx($image), imagesy($image));

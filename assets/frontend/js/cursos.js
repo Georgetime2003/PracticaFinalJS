@@ -287,7 +287,7 @@ function guardarImatgeAlumne(alumne, imatge) {
 
 function pujarDrive(classe) {
 	$.ajax({
-		url: "../assets/backend/pujarDrive.php",
+		url: "../assets/backend/googledrive.php",
 		type: "POST",
 		data: JSON.stringify({
 			classe: classe.cicle + classe.curs + classe.grup,
@@ -295,9 +295,13 @@ function pujarDrive(classe) {
 		}),
 		success: function (data) {
 			//Mostrem un missatge de confirmació
+			console.log(data);
 			data = JSON.parse(data);
 			$("#missatge").text(data.message);
 			$(".toast").toast("show");
+		},
+		error: function (data) {
+			console.log(data);
 		},
 	});
 }
