@@ -16,7 +16,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/24202bad1a.js" crossorigin="anonymous"></script>
   <script src="..\assets\frontend\js\import.js"></script>
-  <script src="..\assets\frontend\js\carregar.js"></script>
   <link rel="stylesheet" href="..\assets/frontend/css/app.css">
   <title>Fotos Alumnes</title>
 </head>
@@ -31,13 +30,20 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link active" aria-current="page" href="#">Administració dades</a>
-              <a class="nav-link" href="cursos.html">Pujar Dades</a>
+              <a class="nav-link" href="cursos.html">Fer Fotos</a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </nav>
+  <div class="toast align-items-center text-bg-success border-0 position-absolute my-3 top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body" id="missatge">
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
   <br>
   <div class="container">
     <div class="row">
@@ -49,25 +55,10 @@
             <label for="formFile" class="form-label">Importar fitxer</label>
             <input class="form-control" type="file" id="formFile" name="file">
           </div>
-          <button type="button" id="Importar" class="btn btn-primary">Importar</button>
+          <button type="button" id="importar" class="btn btn-primary">Importar</button>
         </form>
       </div>
     </div>
-  </div>
-
-  <div class="container" id="taula">
-    <table class="table table-striped border border-2 my-5">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Usuari</th>
-          <th scope="col">Nom i Cognoms</th>
-          <th scope="col">Classe</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
   </div>
 </body>
 

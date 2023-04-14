@@ -31,7 +31,8 @@ try{
     //     session_start();
     //     $_SESSION['usuari'] = $firstname;
     //     $_SESSION['email'] = $email;
-    //     // i redirigirem a la pagina del admin
+    //      $_SESSION['token'] = $accessToken;
+    //     i redirigirem a la pagina del admin
     //     header('Location: ../../admin');
     // }
     session_start();

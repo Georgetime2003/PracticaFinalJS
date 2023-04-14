@@ -1,5 +1,22 @@
 window.onload = function() {
-	$('#Importar').click(importar);
+	document.getElementById("importar").addEventListener("click", importar);
+
+	$.ajax({
+		url: "../assets/backend/login.php",
+		type: "POST",
+		data: JSON.stringify({
+		  accio: "logged",
+		}),
+		contentType: "application/json",
+		dataType: "json",
+		success: function (data) {
+			console.log(data);
+		},
+		error: function (data) {
+			console.log(data);
+		  throw new Error("Error obtenint les dades");
+		},
+	  });
 }
 
 function importar() {
@@ -42,13 +59,14 @@ function importar() {
 					});
 				}
 				$.ajax({
-					url: "assets/backend/import.php",
+					url: "../assets/backend/import.php",
 					type: "POST",
 					data: JSON.stringify(json),
 					contentType: "application/json",
 					dataType: "json",
 					success: function(data) {
-						console.log(data);
+						$("#missatge").text(data.message);
+						$(".toast").toast("show");
 					},
 					error: function(data) {
 						console.log(data);
