@@ -32,14 +32,10 @@ $fp = fopen('database/JSON/classes.json', 'w');
 fwrite($fp, json_encode($llistaUsuaris));
 fclose($fp);
 $classe = LlistaUsuaris::getUsuaris($post->grup);
-//Filtrem els alumnes per classe on l'alumne que s'ha fet la foto pertany
-$llistaUsuaris = array_filter($classe, function($alumne) use ($post){
-	return $alumne->cicle.$alumne->curs.$alumne->grup == $post->grup;
-});
+
 
 echo json_encode(array(
 	"status" => 'success',
-	"message" => 'Imatge guardada correctament',
-	"classe" => $llistaUsuaris
+	"message" => 'Imatge guardada correctament'
 ));
 ?>

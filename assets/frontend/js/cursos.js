@@ -195,9 +195,23 @@ function accedirAlumne(alumne) {
     //Pausem el video per fer la foto
     $("#video").attr("hidden", true);
     let canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
+
+    //Fem la mida del canvas 500x700 on es situaria al mig de la foto per no tallar-la o deformar-la
+	canvas.width = 500;
+	canvas.height = 700;
+	let ctx = canvas.getContext("2d");
+	//Dibuixem la foto al canvas
+	ctx.drawImage(
+		video,
+		(video.videoWidth - 500) / 2,
+		(video.videoHeight - 700) / 2,
+		500,
+		700,
+		0,
+		0,
+		500,
+		700
+	);
     //Mostrem la foto
     $("#fotoAlumne").attr("src", canvas.toDataURL("image/png"));
     $("#fotoAlumne").attr("hidden", false);
