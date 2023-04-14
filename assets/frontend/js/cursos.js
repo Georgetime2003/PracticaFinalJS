@@ -284,3 +284,20 @@ function guardarImatgeAlumne(alumne, imatge) {
 		},
 	});
 }
+
+function pujarDrive(classe) {
+	$.ajax({
+		url: "../assets/backend/pujarDrive.php",
+		type: "POST",
+		data: JSON.stringify({
+			classe: classe.cicle + classe.curs + classe.grup,
+			tutor: classe.tutor.usuari
+		}),
+		success: function (data) {
+			//Mostrem un missatge de confirmació
+			data = JSON.parse(data);
+			$("#missatge").text(data.message);
+			$(".toast").toast("show");
+		},
+	});
+}
