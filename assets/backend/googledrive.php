@@ -27,6 +27,7 @@ foreach ($files as $file) {
 	}
 }
 
+// Funció per comprovar les carpetes del Drive
 function comprovarCarpetaDrive($id) {
     $client = new Google_Client();
     $client->useApplicationDefaultCredentials();
@@ -48,7 +49,7 @@ function comprovarCarpetaDrive($id) {
 }
 echo json_encode(array('success' => 'S\'ha pujat correctament a google drive, revisa el teu compte de google drive'));
 
-
+// Funció que crea 
 function createFolder($identificador, $idDesti){
     try {
         $client = new Google_Client();
@@ -76,7 +77,7 @@ function createFolder($identificador, $idDesti){
        echo "Error Message: ".$e;
     }
 }
-
+// Funció per pujar les imatges a la carpeta que especifiquem (la del tutor logat)
 function pujarFitxer($file, $idCarpeta){
 	try {
 		$client = new Google_Client();
