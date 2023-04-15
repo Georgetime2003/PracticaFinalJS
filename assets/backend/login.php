@@ -9,7 +9,7 @@ if (!empty($post) && !empty($post->accio) && $post->accio == 'logged') {
         $response = array(
             "logged" => true,
             "user" => array(
-                "username" => 'jpalomino',
+                "username" => $_SESSION['usuari'],
                 "email" => $_SESSION['email'],
                 "token" => $_SESSION['token']
             )

@@ -23,27 +23,31 @@ try{
     $firstname = $userProfile -> firstName;
 
     $username = explode("@", $email);
-    $username = $username[0];
+    
+    // Si el correu no forma part del domini sapalomera.cat redirigim a la pàgina inicial sense obrir sessió
+    if ($username[1] !== 'sapalomera.cat') {
+        header('Location: ../../index.html');
+    }
 
-    // if (strpos($username, '.') !== false) {
-    //     header('Location: ../../index.html');
-    // } else {
-    //     session_start();
-    //     $_SESSION['usuari'] = $firstname;
-    //     $_SESSION['email'] = $email;
-    //      $_SESSION['token'] = $accessToken;
-    //     i redirigirem a la pagina del admin
-    //     header('Location: ../../admin');
-    // }
-    session_start();
-    $_SESSION['usuari'] = $username;
-    $_SESSION['email'] = $email;
-    $_SESSION['token'] = $accessToken;
-    // i redirigirem a la pagina del admin
-    header('Location: ../../admin');
 
-   
-    // finalment obrirem una sessio amb aquest usuari.
+    // Si el correu conté un . vol dir que és un alumne, i per tant, redirigim a la pàgina inicial sense obrir sessió
+    if (strpos($username[0], '.') !== false) {
+        header('Location: ../../index.html');
+    } else {
+        // Quan es loga algú, eliminem  les dades de sessió anteriors
+        session_start();
+        session_unset();
+        session_destroy();
+
+        // I iniciem una nova sessió
+        session_start();
+        $_SESSION['usuari'] = $username[0];
+        $_SESSION['email'] = $email;
+        $_SESSION['token'] = $accessToken;
+        
+        // i redirigirem a la pagina del admin
+        header('Location: ../../admin');
+    }
 
 }catch(Exception $e){
     echo $e->getMessage();
