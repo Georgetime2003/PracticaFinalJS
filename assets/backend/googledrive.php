@@ -46,6 +46,7 @@ function comprovarCarpetaDrive($id) {
         }
     }
 }
+echo json_encode(array('success' => 'S\'ha pujat correctament a google drive, revisa el teu compte de google drive'));
 
 
 function createFolder($identificador, $idDesti){
