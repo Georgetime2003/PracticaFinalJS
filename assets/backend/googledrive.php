@@ -4,8 +4,12 @@ use Google\Service\Drive;
 
 session_start();
 
+//Variable de la folderid on ha de pujar les imatges i a partir del correu de servei proporcionat amb el fitxer JSON
+$folderID = '147KzkT9sb9xv0Xn9Ea7Lhox2QHPWpcCM';
+
 require_once 'google-drive/vendor/autoload.php';
 $post = json_decode(file_get_contents('php://input'), true);
+putenv('GOOGLE_APPLICATION_CREDENTIALS=./database/JSON/credencials.json');
 $rutaCarpeta = './database/images/' . $post['classe'];
 //Comprovem si existeix la carpeta
 
@@ -13,62 +17,86 @@ if (!file_exists($rutaCarpeta)) {
     echo json_encode(array('error' => 'No existeix la carpeta'));   
 	exit; 
 }
-createFolder($post['classe']);
+$carpetaid = createFolder($post['classe'],$folderID);
 //Passar totes les imatges de la carpeta a google drive
 $files = scandir($rutaCarpeta);
 foreach ($files as $file) {
 	if ($file != '.' && $file != '..') {
 		$file = $rutaCarpeta . '/' . $file;
-		// pujarFitxer($file);
+		pujarFitxer($file, $carpetaid);
 	}
 }
 
+function comprovarCarpetaDrive($id) {
+    $client = new Google_Client();
+    $client->useApplicationDefaultCredentials();
+    $client->setScopes(['https://www.googleapis.com/auth/drive']);
+    $driveService = new Google\Service\Drive($client);
 
-
-function createFolder($identificador){
+    $optParams = array(
+    'fields' => $id
+    );
     try {
-        $client = new Google\Client();
-        $client->setAuthConfig('./database/JSON/client_secret.json');
-        $client->addScope(Google\Service\Drive::DRIVE);
-		$client->setAccessToken($_SESSION['token']['access_token']);
-        // $redirect_uri = 'http://locahost/JS/UF4/Practica%20Final/assets/backend/googledrive.php';
-        // $client->setRedirectUri($redirect_uri);
-	
-        
+    $file = $driveService->files->get($id, $optParams);
+    } catch (Google_Service_Exception $e) {
+        if ($e->getCode() == 404) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
 
-        $driveService = new Drive($client);
-        $fileMetadata = new Drive\DriveFile(array(
+
+function createFolder($identificador, $idDesti){
+    try {
+        $client = new Google_Client();
+        $client->useApplicationDefaultCredentials();
+        $client->setScopes(['https://www.googleapis.com/auth/drive']);
+        $service = new Google\Service\Drive($client);
+        $fileMetadata = new Google\Service\Drive\DriveFile(array(
             'name' => $identificador,
-            'mimeType' => 'application/vnd.google-apps.folder'));
-        $file = $driveService->files->create($fileMetadata, array(
+            'mimeType' => 'application/vnd.google-apps.folder',
+            'parents' => array($idDesti)
+        ));
+        unset($fileMetadata->exportLinks);
+        $file = $service->files->create($fileMetadata, array(
             'fields' => 'id'));
-        printf("Folder ID: %s\n", $file->id);
+        //Donem permisos al correu de la session
+        $userPermission = new Google\Service\Drive\Permission(array(
+            'type' => 'user',
+            'role' => 'writer',
+            'emailAddress' => $_SESSION['email']
+        ));
         return $file->id;
+
 
     }catch(Exception $e) {
        echo "Error Message: ".$e;
     }
 }
 
-// function pujarFitxer($file){
-// 	try {
-// 		$client = new Client();
-// 		$client->useApplicationDefaultCredentials();
-// 		$client->addScope(Drive::DRIVE);
-// 		$driveService = new Drive($client);
-// 		$fileMetadata = new Drive\DriveFile(array(
-// 			'name' => basename($file)));
-// 		$content = file_get_contents($file);
-// 		$file = $driveService->files->create($fileMetadata, array(
-// 			'data' => $content,
-// 			'mimeType' => 'image/jpeg',
-// 			'uploadType' => 'multipart',
-// 			'fields' => 'id'));
-// 		printf("File ID: %s\n", $file->id);
-// 		return $file->id;
+function pujarFitxer($file, $idCarpeta){
+	try {
+		$client = new Google_Client();
+        $client->useApplicationDefaultCredentials();
+        $client->setScopes(['https://www.googleapis.com/auth/drive']);
+        $service = new Google\Service\Drive($client);
+        $fileMetadata = new Google\Service\Drive\DriveFile(array(
+            'name' => basename($file),
+            'parents' => array($idCarpeta)
+        ));
+        $content = file_get_contents($file);
+        unset($fileMetadata->exportLinks);
+        $file = $service->files->create($fileMetadata, array(
+            'data' => $content,
+            'mimeType' => 'image/jpeg',
+            'uploadType' => 'multipart',
+            'fields' => 'id'));
+        return $file->id;
 
-// 	}catch(Exception $e) {
-// 	   echo "Error Message: ".$e;
-// 	}
-// }
+	}catch(Exception $e) {
+	   echo "Error Message: ".$e;
+	}
+}
 ?>
